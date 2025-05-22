@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import React, { useRef, useState } from "react";
 import { Text, View, TouchableOpacity, Animated, Easing, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import SleepAlarm from "../components/SleepAlarm";
 
 // It's good practice to require images like this
 const logo = require("../assets/logo.jpg");
@@ -9,6 +10,7 @@ const logo = require("../assets/logo.jpg");
 export default function Page() {
   const { top } = useSafeAreaInsets(); // Get safe area inset for top padding
   const [isLightTheme, setIsLightTheme] = useState(false);
+  const [showSleepAlarm, setShowSleepAlarm] = useState(false);
   const themeAnimation = useRef(new Animated.Value(0)).current; // 0 for dark, 1 for light
 
   const toggleTheme = () => {
@@ -20,6 +22,14 @@ export default function Page() {
       easing: Easing.out(Easing.quad),
       useNativeDriver: false,
     }).start();
+  };
+
+  const startMonitoring = () => {
+    setShowSleepAlarm(true);
+  };
+
+  const stopMonitoring = () => {
+    setShowSleepAlarm(false);
   };
 
   const animatedScreenBackgroundColor = themeAnimation.interpolate({
@@ -47,6 +57,10 @@ export default function Page() {
     outputRange: ["#FFFFFF", "#E0E7FF"], // Dark: white, Light: indigo-100
   });
 
+  if (showSleepAlarm) {
+    return <SleepAlarm onReturn={stopMonitoring} closedEyeThreshold={2000} />;
+  }
+
   return (
     <Animated.View style={{ flex: 1, backgroundColor: animatedScreenBackgroundColor, paddingTop: top }}>
       {/* Header Section */}
@@ -68,6 +82,21 @@ export default function Page() {
         <Animated.Text style={{ color: animatedBodyTextColor }} className="text-md text-center mb-10">
           Using advanced algorithms and your phone's camera, the app detects signs of fatigue. If it senses you're nodding off, it triggers an alert to help you stay awake and focused.
         </Animated.Text>
+
+        {/* Start Monitoring Button */}
+        <TouchableOpacity
+          onPress={startMonitoring}
+          activeOpacity={0.8}
+          className="mb-4"
+        >
+          <Animated.View style={{ backgroundColor: "#10B981", borderRadius: 8 }} className="py-3 px-8">
+            <Animated.Text style={{ color: "#FFFFFF" }} className="text-xl font-bold text-center">
+              Start Monitoring
+            </Animated.Text>
+          </Animated.View>
+        </TouchableOpacity>
+
+        {/* Theme Toggle Button */}
         <TouchableOpacity
           onPress={toggleTheme}
           activeOpacity={0.8}

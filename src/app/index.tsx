@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import React, { useRef, useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Animated, Easing, Image, Modal } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import DrowsinessDetector from "../components/DrowsinessDetector";
 
 // It's good practice to require images like this
 const logo = require("../assets/logo.jpg");
@@ -14,6 +15,7 @@ export default function Page() {
   const [isEndSessionModalVisible, setIsEndSessionModalVisible] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('30 minutes');
   const [remainingMinutes, setRemainingMinutes] = useState(30);
+  const [showDrowsinessDetector, setShowDrowsinessDetector] = useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const welcomeTextAnim = useRef(new Animated.Value(0)).current;
   const finalTextAnim = useRef(new Animated.Value(0)).current;
@@ -53,7 +55,7 @@ export default function Page() {
     arrivalAnim.setValue(0);
     breakAnim.setValue(0);
     buttonsAnim.setValue(0);
-    
+
     // Start the welcome screen animations
     Animated.sequence([
       // Fade in welcome screen and "Welcome!" text together
@@ -172,19 +174,31 @@ export default function Page() {
     });
   };
 
+  const toggleDrowsinessDetection = () => {
+    setShowDrowsinessDetector(!showDrowsinessDetector);
+  };
+
+  const stopDrowsinessDetection = () => {
+    setShowDrowsinessDetector(false);
+  };
+
+  if (showDrowsinessDetector) {
+    return <DrowsinessDetector onReturn={stopDrowsinessDetection} closedEyeThreshold={2000} />;
+  }
+
   if (!isWelcomeScreen) {
     return (
       <Animated.View style={{ flex: 1, backgroundColor: '#030046', paddingTop: top, opacity: fadeAnim }}>
         {/* Header and Logo Section */}
         <View className="items-center justify-start w-full">
-          <Image 
-            source={logo} 
-            style={{ 
-              width: '90%', 
+          <Image
+            source={logo}
+            style={{
+              width: '90%',
               height: undefined,
               aspectRatio: 1,
-              borderRadius: 15 
-            }} 
+              borderRadius: 15
+            }}
             resizeMode="contain"
           />
         </View>
@@ -210,6 +224,19 @@ export default function Page() {
               </Text>
             </View>
           </TouchableOpacity>
+          {/* Drowsiness Detection Button */}
+          <TouchableOpacity
+            onPress={toggleDrowsinessDetection}
+            activeOpacity={0.8}
+            style={{ position: 'absolute', bottom: 200, opacity: buttonsAnim }}
+          >
+            <View style={{ backgroundColor: '#EF4444', borderRadius: 8, width: 200 }} className="py-3 px-8">
+              <Text style={{ color: '#FFFFFF' }} className="text-xl font-bold text-center">
+                {showDrowsinessDetector ? 'Stop Monitoring' : 'Start Monitoring'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
         </View>
       </Animated.View>
     );
@@ -217,16 +244,16 @@ export default function Page() {
 
   if (isAnimationScreen) {
     return (
-      <Animated.View 
-        style={{ 
-          flex: 1, 
+      <Animated.View
+        style={{
+          flex: 1,
           backgroundColor: '#030046',
           justifyContent: 'center',
           alignItems: 'center',
           opacity: fadeAnim,
         }}
       >
-        <View style={{ 
+        <View style={{
           position: 'absolute',
           left: 0,
           right: 0,
@@ -235,8 +262,8 @@ export default function Page() {
           justifyContent: 'center',
           alignItems: 'center'
         }}>
-          <Animated.Text 
-            style={{ 
+          <Animated.Text
+            style={{
               position: 'absolute',
               color: '#FFFFFF',
               fontSize: 48,
@@ -247,8 +274,8 @@ export default function Page() {
           >
             Welcome!
           </Animated.Text>
-          <Animated.Text 
-            style={{ 
+          <Animated.Text
+            style={{
               position: 'absolute',
               color: '#FFFFFF',
               fontSize: 48,
@@ -265,16 +292,16 @@ export default function Page() {
   }
 
   return (
-    <Animated.View 
-      style={{ 
-        flex: 1, 
+    <Animated.View
+      style={{
+        flex: 1,
         backgroundColor: '#030046',
         justifyContent: 'center',
         alignItems: 'center',
         opacity: fadeAnim,
       }}
     >
-      <View style={{ 
+      <View style={{
         position: 'absolute',
         left: 0,
         right: 0,
@@ -283,8 +310,8 @@ export default function Page() {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <Animated.Text 
-          style={{ 
+        <Animated.Text
+          style={{
             position: 'absolute',
             top: 100,
             color: '#79D9F6',
@@ -297,8 +324,8 @@ export default function Page() {
         >
           Drive safely.
         </Animated.Text>
-        <Animated.Text 
-          style={{ 
+        <Animated.Text
+          style={{
             position: 'absolute',
             top: '35%',
             color: '#FFFFFF',
@@ -310,8 +337,8 @@ export default function Page() {
         >
           Your speed: <Text style={{ color: '#22C55E' }}>83 km/h</Text>
         </Animated.Text>
-        <Animated.Text 
-          style={{ 
+        <Animated.Text
+          style={{
             position: 'absolute',
             top: '45%',
             color: '#FFFFFF',
@@ -323,8 +350,8 @@ export default function Page() {
         >
           Arrival time: <Text style={{ color: '#22C55E' }}>19:00</Text>
         </Animated.Text>
-        <Animated.Text 
-          style={{ 
+        <Animated.Text
+          style={{
             position: 'absolute',
             top: '55%',
             color: '#FFFFFF',
@@ -337,6 +364,8 @@ export default function Page() {
           Next break in <Text style={{ color: '#22C55E' }}>{remainingMinutes} minutes</Text>
         </Animated.Text>
       </View>
+
+
       <TouchableOpacity
         onPress={() => setIsEmergencyModalVisible(true)}
         activeOpacity={0.8}

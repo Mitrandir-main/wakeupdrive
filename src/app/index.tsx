@@ -2,7 +2,7 @@ import { Link } from "expo-router";
 import React, { useRef, useState } from "react";
 import { Text, View, TouchableOpacity, Animated, Easing, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import SleepAlarm from "../components/SleepAlarm";
+import DrowsinessDetector from "../components/DrowsinessDetector";
 
 // It's good practice to require images like this
 const logo = require("../assets/logo.jpg");
@@ -58,7 +58,7 @@ export default function Page() {
   });
 
   if (showSleepAlarm) {
-    return <SleepAlarm onReturn={stopMonitoring} closedEyeThreshold={2000} />;
+    return <DrowsinessDetector onReturn={stopMonitoring} closedEyeThreshold={2000} />;
   }
 
   return (

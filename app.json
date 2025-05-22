@@ -12,9 +12,40 @@
         {
           "origin": "https://n"
         }
-      ]
+      ],
+      "react-native-vision-camera",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
+      "expo-video"
     ],
     "name": "wakeupdrive",
-    "slug": "wakeupdrive"
+    "slug": "wakeupdrive",
+    "android": {
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.mitrandirmain.wakeupdrive"
+    },
+    "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      },
+      "bundleIdentifier": "com.mitrandirmain.wakeupdrive"
+    },
+    "extra": {
+      "router": {
+        "origin": "https://n"
+      },
+      "eas": {
+        "projectId": "7f212842-52c9-4c69-9af4-0859758e0a6d"
+      }
+    }
   }
 }

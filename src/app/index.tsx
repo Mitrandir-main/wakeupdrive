@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Animated, Easing, Image, Modal } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DrowsinessDetector from "../components/DrowsinessDetector";
+import TextDisplay from "../components/TextDisplay";
 
 // It's good practice to require images like this
 const logo = require("../assets/logo.jpg");
@@ -205,15 +206,11 @@ export default function Page() {
 
         {/* Main Content Section */}
         <View className="w-full items-center px-6 mt-2">
-          <Text style={{ color: '#E2E8F0' }} className="text-xl text-center mb-6">
-            Your co-pilot for safer journeys. WakeUpDrive monitors your alertness and helps prevent drowsiness behind the wheel.
-          </Text>
+          <TextDisplay text="Your co-pilot for safer journeys. WakeUpDrive monitors your alertness and helps prevent drowsiness behind the wheel." />
           <Text style={{ color: '#A5B4FC' }} className="text-3xl font-semibold text-center tracking-wider mb-4">
             How It Works
           </Text>
-          <Text style={{ color: '#E2E8F0' }} className="text-xl text-center mb-8">
-            Using advanced algorithms and your phone's camera, the app detects signs of fatigue. If it senses you're nodding off, it triggers an alert to help you stay awake and focused.
-          </Text>
+          <TextDisplay text="Using advanced algorithms and your phone's camera, the app detects signs of fatigue. If it senses you're nodding off, it triggers an alert to help you stay awake and focused." />
           <TouchableOpacity
             onPress={showWelcomeScreen}
             activeOpacity={0.8}
